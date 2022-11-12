@@ -2,11 +2,24 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import URL from './URL.js';
+import Table from "./components/Table";
+
+
+
+//localStorage.keys=["marketData","templateJson"]
+const columns = [
+  { label: "Rank", accessor: "rank", sortable: true },
+  { label: "Email", accessor: "subset", sortable: false },
+  { label: "Sales ID", accessor: "sales_id", sortable: true},
+  { label: "Exp per wax", accessor: "epw", sortable: true, sortbyOrder: "desc" },
+  { label: "Link", accessor: "link", sortable: true },
+];
+
 
 class App extends React.Component{
 
-  expdict = {'24K Gold': {'Rank 1': '12,500', 'Rank 2': '25,000', 'Rank 3': '50,000', 'Rank 4': '125,000'}, '24K Gold (Loot)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '500,000'}, 'Base': {'Rank 1': 1, 'Rank 2': 2, 'Rank 3': 5, 'Rank 4': 15}, 'Black Camo': {'Rank 1': '1,600', 'Rank 2': '3,200', 'Rank 3': '8,000', 'Rank 4': '24,000'}, 'Black Camo First Wave': {'Rank 1': '6,000', 'Rank 2': '12,000', 'Rank 3': '30,000', 'Rank 4': '90,000'}, 'Black Camo First Wave (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '180,000'}, 'Black Camo First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '180,000'}, 'Blood Foil': {'Rank 1': '50,000', 'Rank 2': '100,000', 'Rank 3': '200,000', 'Rank 4': '500,000'}, 'Blood Foil (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '1,000,000'}, 'Blood Foil (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '1,000,000'}, 'Camo': {'Rank 1': '400', 'Rank 2': '800', 'Rank 3': '2,000', 'Rank 4': '6,000'}, 'Camo (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '12,000'}, 'Camo (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '12,000'}, 'Camo Edge First Wave': {'Rank 1': '4,000', 'Rank 2': '8,000', 'Rank 3': '20,000', 'Rank 4': '60,000'}, 'Camo Edge First Wave (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '120,000'}, 'Camo Edge First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '120,000'}, 'Decadent': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '500,000'}, 'Fire Forged': {'Rank 1': '200', 'Rank 2': '400', 'Rank 3': '1,000', 'Rank 4': '3,000'}, 'Fire Forged (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6,000'}, 'Fire Forged (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6,000'}, 'Fire Forged First Wave': {'Rank 1': '3,000', 'Rank 2': '6,000', 'Rank 3': '15,000', 'Rank 4': '45,000'}, 'Fire Forged First Wave (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '90,000'}, 'Fire Forged First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '90,000'}, 'Foil Fire First Wave': {'Rank 1': '8,000', 'Rank 2': '16,000', 'Rank 3': '40,000', 'Rank 4': '120,000'}, 'Foil Fire First Wave (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '240,000'}, 'Foil Fire First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '240,000'}, 'Foil Prime': {'Rank 1': '200', 'Rank 2': '400', 'Rank 3': '1,000', 'Rank 4': '3,000'}, 'Foil Prime (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6,000'}, 'Foil Prime (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6,000'}, 'Foil Prime (Loot)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '18,000'}, 'Full Art': {'Rank 1': 10, 'Rank 2': 20, 'Rank 3': 50, 'Rank 4': 150}, 'Full Art (G0Force)': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 300}, 'Full Art (Infinite)': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 300}, 'Full Art (Resource)': {'Rank 1': 1, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Full Art Medal': {'Rank 1': 20, 'Rank 2': 40, 'Rank 3': 100, 'Rank 4': 300}, 'Full Art Medal First Wave': {'Rank 1': '1,000', 'Rank 2': '2,000', 'Rank 3': '5,000', 'Rank 4': '15,000'}, 'Hacked': {'Rank 1': '1,600', 'Rank 2': '3,200', 'Rank 3': '8,000', 'Rank 4': '24,000'}, 'Hex Tech': {'Rank 1': '600', 'Rank 2': '1,200', 'Rank 3': '3,000', 'Rank 4': '9,000'}, 'Hex Tech (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '18,000'}, 'Hex Tech (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '18,000'}, 'Loot': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Murdered Out': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '12,000'}, 'Murdered Out (Decadent)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '125,000'}, 'Murdered Out (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '48,000'}, 'Murdered Out (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '48,000'}, 'Night Vision': {'Rank 1': '800', 'Rank 2': '1,600', 'Rank 3': '4,000', 'Rank 4': '12,000'}, 'Night Vision (G0Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '24,000'}, 'Night Vision (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '24,000'}, 'Owner': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Promo': {'Rank 1': 1, 'Rank 2': 2, 'Rank 3': 5, 'Rank 4': 15}, 'Smoke Noir': {'Rank 1': '6,000', 'Rank 2': '12,000', 'Rank 3': '25,000', 'Rank 4': '70,000'}, 'Tenant': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Thermal Ash': {'Rank 1': '25,000', 'Rank 2': '50,000', 'Rank 3': '100,000', 'Rank 4': '250,000'}, 'Unique': {'Rank 1': '600', 'Rank 2': '1,200', 'Rank 3': '3,000', 'Rank 4': '9,000'}, 'Upgrade': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 1}};
-
+  expdict = {'24K Gold': {'Rank 1': '12500', 'Rank 2': '25000', 'Rank 3': '50000', 'Rank 4': '125000'}, '24K Gold (Loot)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '500000'}, 'Base': {'Rank 1': 1, 'Rank 2': 2, 'Rank 3': 5, 'Rank 4': 15}, 'Black Camo': {'Rank 1': '1600', 'Rank 2': '3200', 'Rank 3': '8000', 'Rank 4': '24000'}, 'Black Camo First Wave': {'Rank 1': '6000', 'Rank 2': '12000', 'Rank 3': '30000', 'Rank 4': '90000'}, 'Black Camo First Wave (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '180000'}, 'Black Camo First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '180000'}, 'Blood Foil': {'Rank 1': '50000', 'Rank 2': '100000', 'Rank 3': '200000', 'Rank 4': '500000'}, 'Blood Foil (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '1000000'}, 'Blood Foil (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '1000000'}, 'Camo': {'Rank 1': '400', 'Rank 2': '800', 'Rank 3': '2000', 'Rank 4': '6000'}, 'Camo (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '12000'}, 'Camo (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '12000'}, 'Camo Edge First Wave': {'Rank 1': '4000', 'Rank 2': '8000', 'Rank 3': '20000', 'Rank 4': '60000'}, 'Camo Edge First Wave (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '120000'}, 'Camo Edge First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '120000'}, 'Decadent': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '500000'}, 'Fire Forged': {'Rank 1': '200', 'Rank 2': '400', 'Rank 3': '1000', 'Rank 4': '3000'}, 'Fire Forged (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6000'}, 'Fire Forged (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6000'}, 'Fire Forged First Wave': {'Rank 1': '3000', 'Rank 2': '6000', 'Rank 3': '15000', 'Rank 4': '45000'}, 'Fire Forged First Wave (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '90000'}, 'Fire Forged First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '90000'}, 'Foil Fire First Wave': {'Rank 1': '8000', 'Rank 2': '16000', 'Rank 3': '40000', 'Rank 4': '120000'}, 'Foil Fire First Wave (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '240000'}, 'Foil Fire First Wave (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '240000'}, 'Foil Prime': {'Rank 1': '200', 'Rank 2': '400', 'Rank 3': '1000', 'Rank 4': '3000'}, 'Foil Prime (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6000'}, 'Foil Prime (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '6000'}, 'Foil Prime (Loot)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '18000'}, 'Full Art': {'Rank 1': 10, 'Rank 2': 20, 'Rank 3': 50, 'Rank 4': 150}, 'Full Art (G-Force)': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 300}, 'Full Art (Infinite)': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 300}, 'Full Art (Resource)': {'Rank 1': 1, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Full Art Medal': {'Rank 1': 20, 'Rank 2': 40, 'Rank 3': 100, 'Rank 4': 300}, 'Full Art Medal First Wave': {'Rank 1': '1000', 'Rank 2': '2000', 'Rank 3': '5000', 'Rank 4': '15000'}, 'Hacked': {'Rank 1': '1600', 'Rank 2': '3200', 'Rank 3': '8000', 'Rank 4': '24000'}, 'Hex Tech': {'Rank 1': '600', 'Rank 2': '1200', 'Rank 3': '3000', 'Rank 4': '9000'}, 'Hex Tech (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '18000'}, 'Hex Tech (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '18000'}, 'Loot': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Murdered Out': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '12000'}, 'Murdered Out (Decadent)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '125000'}, 'Murdered Out (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '48000'}, 'Murdered Out (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '48000'}, 'Night Vision': {'Rank 1': '800', 'Rank 2': '1600', 'Rank 3': '4000', 'Rank 4': '12000'}, 'Night Vision (G-Force)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '24000'}, 'Night Vision (Infinite)': {'Rank 1': '0', 'Rank 2': '0', 'Rank 3': '0', 'Rank 4': '24000'}, 'Owner': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Promo': {'Rank 1': 1, 'Rank 2': 2, 'Rank 3': 5, 'Rank 4': 15}, 'Smoke Noir': {'Rank 1': '6000', 'Rank 2': '12000', 'Rank 3': '25000', 'Rank 4': '70000'}, 'Tenant': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Thermal Ash': {'Rank 1': '25000', 'Rank 2': '50000', 'Rank 3': '100000', 'Rank 4': '250000'}, 'Unique': {'Rank 1': '600', 'Rank 2': '1200', 'Rank 3': '3000', 'Rank 4': '9000'}, 'Upgrade': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 1}};
+  
   async loadJsonURL(url,key) {
     var response=fetch(url.stringify(), {
         method: 'GET',
@@ -22,6 +35,11 @@ class App extends React.Component{
   }
 
   async loadAllTemplates(url,key,index) {
+    if (index === 1){
+      this.setState({
+        pending:1
+      })
+    }
     url.query["page"]=index;
     console.log(url.stringify());
     var response=fetch(url.stringify(), {
@@ -39,11 +57,104 @@ class App extends React.Component{
         console.log(jsonresponse.data.length);
         console.log(url.stringify());
         this.loadAllTemplates(url,key,index+1);
+      }else{
+        this.setState({
+          pending:0
+        })
       }
-
   }
 
+  sleep(ms) {
+    return new Promise(
+      resolve => setTimeout(resolve, ms)
+    )
+  }
 
+  async getAllMarketData(){
+    let rank = this.state.rank;
+    //let rarity = this.state.rarity;
+    let subset = this.state.subset;
+    //let type = this.state.type;
+    let queuearray = [];
+    subset.forEach((sub)=>{
+      rank.forEach((rare)=>{
+        console.log(sub,rare)
+        console.log(this.expdict[sub])
+        console.log(this.expdict[sub][rare])
+        if (Number(this.expdict[sub][rare])!==0){
+          queuearray.push([rare,sub])
+        }
+      })
+    })
+    this.setState({
+      pending:1
+    })
+    while (queuearray.length>0){
+      await this.sleep(800);
+      let element = queuearray.pop();
+      let rare = element[0];
+      let sub = element[1];
+      this.getMarketData(rare,sub,queuearray.length);
+    }
+    this.setState({
+      pending:0
+    })
+  }
+
+  async getMarketData(rank,subset,length){
+    let marketurl = this.state.marketlink;
+    marketurl.add({
+      "immutable_data.rank":rank,
+      "immutable_data.subset":subset
+    })
+    console.log(marketurl.stringify())
+    var response=fetch(marketurl.stringify(), {
+      method: 'GET',
+      headers: {
+          'Accept': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    var jsonresponse = await response
+    this.saveMarketData(jsonresponse,rank,subset,this.expdict[subset][rank],length);
+  }
+
+  async saveMarketData(jsonresponse,rank,subset,exp,length){
+    const denominator = 100000000;
+    if (jsonresponse.data.length>0){
+      let waxprice =Number(jsonresponse.data[0].price.amount/denominator);
+      let sales_id =Number(jsonresponse.data[0].sales_id);
+      let link = "https://wax.atomichub.io/market/sale/"+sales_id;
+      console.log(exp)
+      console.log(waxprice/Number(exp))
+      let epw = waxprice/Number(exp)
+      let dict = {
+        waxprice:waxprice,
+        sales_id:sales_id,
+        link:link,
+        epw:epw,
+        rank:rank,
+        subset:subset
+      }
+      let newarray = [...this.state.marketArray];
+      
+      newarray.push(dict);
+      console.log(newarray);
+      if (length ===0){
+        localStorage.setItem("marketData",JSON.stringify(newarray))
+        this.setState({
+          marketArray:newarray,
+          pending:0
+        })
+      }else{
+        this.setState({
+          marketArray:newarray,
+          pending:1
+        },()=>{console.log(this.state.marketArray)})
+      }
+    }
+    console.log(rank,subset,exp)
+  }
 
   async populateTemplate(){
     //Get args
@@ -58,7 +169,7 @@ class App extends React.Component{
       let jsonresponse=localStorage.getItem("templateJson")
       jsonresponse = JSON.parse(jsonresponse)
       if ("rank" in jsonresponse ){
-        rank = [...jsonresponse["rank"]]
+        rank = jsonresponse["rank"]
       }
       if ("rarity" in jsonresponse ){
         rarity = jsonresponse["rarity"]
@@ -75,7 +186,15 @@ class App extends React.Component{
       subset = new Set(subset)
     }
 
-    //process incoming json if coming
+    if ("marketData" in localStorage){
+      let marketData=localStorage.getItem("marketData")
+      console.log(marketData)
+      marketData = new Array(marketData)
+      this.setState({
+        marketArray:marketData
+      })
+    }
+    //process incoming json if incoming
     if (args.length > 0){
       let incomingjson = args[0];
       incomingjson.data.forEach(element => {
@@ -99,7 +218,7 @@ class App extends React.Component{
       ()=>{
         localStorage.setItem("templateJson",JSON.stringify((({ rank, rarity, type, subset }) => ({ rank, rarity, type, subset }))(this.state)));
         console.log("state",this.state);
-        console.log("templateJson",JSON.parse(localStorage.getItem("templateJson")))
+        console.log("templateJson",JSON.parse(localStorage.getItem("templateJson")));
       }
     )
 
@@ -115,12 +234,26 @@ class App extends React.Component{
       order:"desc",
       sort:"created"
     });
+
+    const marketlink = new URL("https://wax.api.atomicassets.io/atomicmarket/v2/sales")
+    marketlink.add({
+      collection_name:"warsaken",
+      page:1,
+      state:1,
+      limit:10,
+      order:"asc",
+      sort:"price"
+    });
+
     this.state={
-        templatelink:templatelink,
-        rank : [],
-        rarity : [],
-        type : [],
-        subset : []
+      templatelink:templatelink,
+      marketlink:marketlink,
+      rank : [],
+      rarity : [],
+      type : [],
+      subset : [],
+      marketArray:[],
+      pending:0
     }
   }
 
@@ -128,10 +261,6 @@ componentDidMount(){
   this.populateTemplate();
 }
 
-
-  static expdict = { };
-  static namelist=[];
-  static raritylist=[];
   render()  {
       return (
       <div className="App">
@@ -146,8 +275,25 @@ componentDidMount(){
           <button onClick={()=>localStorage.clear()}>
             clearCache
           </button>
+          <button onClick={()=>this.getAllMarketData()}>
+            getMarketData
+          </button>
+          <p>
+            {(this.state.pending===0)? "Done Loading": "Still loading"}
+          </p>
         </header>
+        <div className="table_container">
+        <h1>Reusable sortable table with React</h1>
+        {(this.state.pending===0)&&
+          <Table
+            caption="Cheap exp breakdown"
+            data={this.state.marketArray}
+            columns={columns}
+          />
+        }
+        </div>
       </div>
+      
     );
   }
 }
