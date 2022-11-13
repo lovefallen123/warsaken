@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/warsaken/static/css/main.81963320.css",
-    "main.js": "/warsaken/static/js/main.f9b3cb15.js",
+    "main.js": "/warsaken/static/js/main.403c072b.js",
     "static/js/787.78ab4243.chunk.js": "/warsaken/static/js/787.78ab4243.chunk.js",
     "static/media/logo.svg": "/warsaken/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/warsaken/index.html",
     "main.81963320.css.map": "/warsaken/static/css/main.81963320.css.map",
-    "main.f9b3cb15.js.map": "/warsaken/static/js/main.f9b3cb15.js.map",
+    "main.403c072b.js.map": "/warsaken/static/js/main.403c072b.js.map",
     "787.78ab4243.chunk.js.map": "/warsaken/static/js/787.78ab4243.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.81963320.css",
-    "static/js/main.f9b3cb15.js"
+    "static/js/main.403c072b.js"
   ]
 }
