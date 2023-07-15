@@ -2,7 +2,7 @@ import { database } from "./firebase";
 import { onChildAdded, ref } from "firebase/database";
 
 
-getVariables(){
+function getVariables() {
     const DB_EXP_KEY = "exp";
     const expRef = ref(database, DB_EXP_KEY);
     const expdict = {}
