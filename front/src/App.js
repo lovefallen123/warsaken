@@ -1,8 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import URL from './URL.js';
 import Table from "./components/Table";
+import {expdict,subset,rarity,rank,type} from "./variables";
+
+import { database } from "./firebase";
+import { onChildAdded, ref } from "firebase/database";
 
 
 
@@ -20,7 +23,6 @@ const columns = [
 
 class App extends React.Component{
 
-  expdict = {'24K Gold': {'Rank 1': 12500,  'Rank 2': 25000,  'Rank 3': 50000,  'Rank 4': 125000}, '24K Gold (Loot)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 500000}, 'Base': {'Rank 1': 1, 'Rank 2': 2, 'Rank 3': 5, 'Rank 4': 15}, 'Black Camo': {'Rank 1': 1600,  'Rank 2': 3200,  'Rank 3': 8000,  'Rank 4': 24000}, 'Black Camo First Wave': {'Rank 1': 6000,  'Rank 2': 12000,  'Rank 3': 30000,  'Rank 4': 90000}, 'Black Camo First Wave (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 180000}, 'Black Camo First Wave (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 180000}, 'Blood Foil': {'Rank 1': 50000,  'Rank 2': 100000,  'Rank 3': 200000,  'Rank 4': 500000}, 'Blood Foil (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 1000000}, 'Blood Foil (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 1000000}, 'Camo': {'Rank 1': 400,  'Rank 2': 800,  'Rank 3': 2000,  'Rank 4': 6000}, 'Camo (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 12000}, 'Camo (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 12000}, 'Camo Edge First Wave': {'Rank 1': 4000,  'Rank 2': 8000,  'Rank 3': 20000,  'Rank 4': 60000}, 'Camo Edge First Wave (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 120000}, 'Camo Edge First Wave (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 120000}, 'Decadent': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 500000}, 'Fire Forged': {'Rank 1': 200,  'Rank 2': 400,  'Rank 3': 1000,  'Rank 4': 3000}, 'Fire Forged (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 6000}, 'Fire Forged (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 6000}, 'Fire Forged First Wave': {'Rank 1': 3000,  'Rank 2': 6000,  'Rank 3': 15000,  'Rank 4': 45000}, 'Fire Forged First Wave (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 90000}, 'Fire Forged First Wave (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 90000}, 'Foil Fire First Wave': {'Rank 1': 8000,  'Rank 2': 16000,  'Rank 3': 40000,  'Rank 4': 120000}, 'Foil Fire First Wave (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 240000}, 'Foil Fire First Wave (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 240000}, 'Foil Prime': {'Rank 1': 200,  'Rank 2': 400,  'Rank 3': 1000,  'Rank 4': 3000}, 'Foil Prime (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 6000}, 'Foil Prime (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 6000}, 'Foil Prime (Loot)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 18000}, 'Full Art': {'Rank 1': 10, 'Rank 2': 20, 'Rank 3': 50, 'Rank 4': 150}, 'Full Art (G-Force)': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 300}, 'Full Art (Infinite)': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 300}, 'Full Art (Resource)': {'Rank 1': 1, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Full Art Medal': {'Rank 1': 20, 'Rank 2': 40, 'Rank 3': 100, 'Rank 4': 300}, 'Full Art Medal First Wave': {'Rank 1': 1000,  'Rank 2': 2000,  'Rank 3': 5000,  'Rank 4': 15000}, 'Hacked': {'Rank 1': 1600,  'Rank 2': 3200,  'Rank 3': 8000,  'Rank 4': 24000}, 'Hex Tech': {'Rank 1': 600,  'Rank 2': 1200,  'Rank 3': 3000,  'Rank 4': 9000}, 'Hex Tech (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 18000}, 'Hex Tech (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 18000}, 'Loot': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Murdered Out': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 12000}, 'Murdered Out (Decadent)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 125000}, 'Murdered Out (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 48000}, 'Murdered Out (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 48000}, 'Night Vision': {'Rank 1': 800,  'Rank 2': 1600,  'Rank 3': 4000,  'Rank 4': 12000}, 'Night Vision (G-Force)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 24000}, 'Night Vision (Infinite)': {'Rank 1': 0,  'Rank 2': 0,  'Rank 3': 0,  'Rank 4': 24000}, 'Owner': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Promo': {'Rank 1': 1, 'Rank 2': 2, 'Rank 3': 5, 'Rank 4': 15}, 'Smoke Noir': {'Rank 1': 6000,  'Rank 2': 12000,  'Rank 3': 25000,  'Rank 4': 70000}, 'Tenant': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 0}, 'Thermal Ash': {'Rank 1': 25000,  'Rank 2': 50000,  'Rank 3': 100000,  'Rank 4': 250000}, 'Unique': {'Rank 1': 600,  'Rank 2': 1200,  'Rank 3': 3000,  'Rank 4': 9000}, 'Upgrade': {'Rank 1': 0, 'Rank 2': 0, 'Rank 3': 0, 'Rank 4': 1}};
   
   async loadAllTemplates(url,key,index) {
     if (index === 1){
@@ -62,7 +64,7 @@ class App extends React.Component{
     let queuearray = [];
     subset.forEach((sub)=>{
       rank.forEach((rare)=>{
-        if (Number(this.expdict[sub][rare])!==0){
+        if (Number(expdict[sub][rare])!==0){
           queuearray.push([rare,sub])
         }
       })
@@ -76,7 +78,10 @@ class App extends React.Component{
       let element = queuearray.pop();
       let rare = element[0];
       let sub = element[1];
-      this.getMarketData(rare,sub,queuearray.length);
+      let reset = this.getMarketData(rare,sub,queuearray.length)
+      // if(reset){
+      //   queuearray.unshift(element);
+      // };
     }
     this.setState({
       pending:0
@@ -85,19 +90,35 @@ class App extends React.Component{
 
   async getMarketData(rank,subset,length){
     let marketurl = this.state.marketlink;
+    let reset = false
     marketurl.add({
       "immutable_data.rank":rank,
       "immutable_data.subset":subset
     })
+    console.log(rank,subset,length)
     var response=fetch(marketurl.stringify(), {
       method: 'GET',
       headers: {
           'Accept': 'application/json',
         },
     })
-    .then(response => response.json())
-    var jsonresponse = await response
-    this.saveMarketData(jsonresponse,rank,subset,this.expdict[subset][rank],length);
+    .then(response => {
+      if(response.status >= 400 ) {
+        console.log(response)
+        reset = true
+      }
+      return response.json();
+    })
+    await response;
+    if (reset){
+      console.log(reset)
+      return reset
+    }else{
+      var jsonresponse = await response
+      console.log(jsonresponse)
+      this.saveMarketData(jsonresponse,rank,subset,expdict[subset][rank],length);
+      return reset
+    }
   }
 
   async saveMarketData(jsonresponse,rank,subset,exp,length){
@@ -136,71 +157,73 @@ class App extends React.Component{
 
   async populateTemplate(){
     //Get args
-    let args = Array.from(arguments);
-    let rank = new Set();
-    let rarity = new Set();
-    let type = new Set();
-    let subset = new Set();
+    console.log(this.state)
+    console.log(expdict,subset,rarity,rank,type)
+    // let args = Array.from(arguments);
+    // let rank = new Set();
+    // let rarity = new Set();
+    // let type = new Set();
+    // let subset = new Set();
     
-    //populate from templateJson
-    if ("templateJson" in localStorage){
-      let jsonresponse=localStorage.getItem("templateJson")
-      jsonresponse = JSON.parse(jsonresponse)
-      if ("rank" in jsonresponse ){
-        rank = jsonresponse["rank"]
-      }
-      if ("rarity" in jsonresponse ){
-        rarity = jsonresponse["rarity"]
-      }
-      if ("type" in jsonresponse ){
-        type = jsonresponse["type"]
-      }
-      if ("subset" in jsonresponse ){
-        subset = jsonresponse["subset"]
-      }
-      rank = new Set(rank)
-      rarity = new Set(rarity)
-      type = new Set(type)
-      subset = new Set(subset)
-    }
+    // //populate from templateJson
+    // if ("templateJson" in localStorage){
+    //   let jsonresponse=localStorage.getItem("templateJson")
+    //   jsonresponse = JSON.parse(jsonresponse)
+    //   if ("rank" in jsonresponse ){
+    //     rank = jsonresponse["rank"]
+    //   }
+    //   if ("rarity" in jsonresponse ){
+    //     rarity = jsonresponse["rarity"]
+    //   }
+    //   if ("type" in jsonresponse ){
+    //     type = jsonresponse["type"]
+    //   }
+    //   if ("subset" in jsonresponse ){
+    //     subset = jsonresponse["subset"]
+    //   }
+    //   rank = new Set(rank)
+    //   rarity = new Set(rarity)
+    //   type = new Set(type)
+    //   subset = new Set(subset)
+    // }
 
-    if ("marketData" in localStorage){
-      let marketData=localStorage.getItem("marketData")
-      marketData = JSON.parse(marketData)
-      console.log("before:",this.state)
-      this.setState({
-        marketArray:marketData
-      },()=>{
-        console.log("after:",this.state)
-      })
-    }
-    //process incoming json if incoming
-    if (args.length > 0){
-      let incomingjson = args[0];
-      incomingjson.data.forEach(element => {
-          rank.add(element.immutable_data.rank)
-          rarity.add(element.immutable_data.rarity)
-          type.add(element.immutable_data.type)
-          subset.add(element.immutable_data.subset)
-        });
-        rank.delete(undefined)
-        rarity.delete(undefined)
-        type.delete(undefined)
-        subset.delete(undefined)
+    // if ("marketData" in localStorage){
+    //   let marketData=localStorage.getItem("marketData")
+    //   marketData = JSON.parse(marketData)
+    //   console.log("before:",this.state)
+    //   this.setState({
+    //     marketArray:marketData
+    //   },()=>{
+    //     console.log("after:",this.state)
+    //   })
+    // }
+    // //process incoming json if incoming
+    // if (args.length > 0){
+    //   let incomingjson = args[0];
+    //   incomingjson.data.forEach(element => {
+    //       rank.add(element.immutable_data.rank)
+    //       rarity.add(element.immutable_data.rarity)
+    //       type.add(element.immutable_data.type)
+    //       subset.add(element.immutable_data.subset)
+    //     });
+    //     rank.delete(undefined)
+    //     rarity.delete(undefined)
+    //     type.delete(undefined)
+    //     subset.delete(undefined)
         
-    }
+    // }
 
-    this.setState({
-      rank : [...rank],
-      rarity : [...rarity],
-      type : [...type],
-      subset : [...subset]},
-      ()=>{
-        localStorage.setItem("templateJson",JSON.stringify((({ rank, rarity, type, subset }) => ({ rank, rarity, type, subset }))(this.state)));
-        console.log("state",this.state);
-        console.log("templateJson",JSON.parse(localStorage.getItem("templateJson")));
-      }
-    )
+    // this.setState({
+    //   rank : [...rank],
+    //   rarity : [...rarity],
+    //   type : [...type],
+    //   subset : [...subset]},
+    //   ()=>{
+    //     localStorage.setItem("templateJson",JSON.stringify((({ rank, rarity, type, subset }) => ({ rank, rarity, type, subset }))(this.state)));
+    //     console.log("state",this.state);
+    //     console.log("templateJson",JSON.parse(localStorage.getItem("templateJson")));
+    //   }
+    // )
 
     
   }
@@ -215,14 +238,16 @@ class App extends React.Component{
       sort:"created"
     });
 
-    const marketlink = new URL("https://wax.api.atomicassets.io/atomicmarket/v2/sales")
+    //const marketlink = new URL("https://wax.api.atomicassets.io/atomicmarket/v2/sales")
+    const marketlink = new URL("https://wax.api.atomicassets.io/atomicmarket/v1/sales/templates")
     marketlink.add({
       collection_name:"warsaken",
       page:1,
       state:1,
-      limit:10,
+      limit:100,
       order:"asc",
-      sort:"price"
+      sort:"price",
+      symbol:"WAX"
     });
 
     this.state={
@@ -233,13 +258,22 @@ class App extends React.Component{
       type : [],
       subset : [],
       marketArray:[],
+      exp:{},
       pending:0
     }
   }
 
   componentDidMount(){
     //this.populateTemplate();
-  }
+    
+    this.setState({
+      rank : rank,
+      rarity : rarity,
+      type : type,
+      exp:expdict,
+      subset : subset,
+    },()=>console.log(this.state))
+};
 
   render()  {
       return (
